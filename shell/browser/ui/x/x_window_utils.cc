@@ -4,9 +4,6 @@
 
 #include "shell/browser/ui/x/x_window_utils.h"
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
 #include <memory>
 
 #include "base/environment.h"
@@ -86,9 +83,11 @@ void MoveWindowAbove(x11::Window window, x11::Window other_window) {
 }
 
 bool IsWindowValid(x11::Window window) {
-  XWindowAttributes attrs;
-  return XGetWindowAttributes(gfx::GetXDisplay(), static_cast<uint32_t>(window),
-                              &attrs);
+  auto* conn = x11::Connection::Get();
+  auto attributes_req = conn->GetWindowAttributes({window});
+  conn->Flush();
+  auto attributes = attributes_req.Sync();
+  return attributes;
 }
 
 }  // namespace electron
