@@ -47,7 +47,7 @@ struct Converter<device::mojom::SerialPortInfoPtr> {
     }
 #elif defined(OS_WIN)
     if (!port->device_instance_id.empty()) {
-      dict.Set("deviceInstanceId", *port->device_instance_id);
+      dict.Set("deviceInstanceId", port->device_instance_id);
     }
 #endif
     return gin::ConvertToV8(isolate, dict);
